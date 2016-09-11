@@ -11,7 +11,7 @@ module TestRepo
 
   def setup
     @old_dir = Dir.pwd
-    Dir.chdir('test/sample')
+    Dir.chdir('test/fixtures/sample')
   end
 
   def teardown
