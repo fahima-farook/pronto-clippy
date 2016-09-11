@@ -3,32 +3,40 @@ require_relative 'clippy/wrapper'
 
 module Pronto
   class ClippyRunner < Runner
+    attr_reader :patches
+
     def run
       return [] unless @patches
 
-      @offences = Clippy::Wrapper.new.lint
 
-      @patches
+      patches
         .reject { |patch| patch.additions.zero? }
         .select { |patch| rust_file?(patch.new_file_full_path.to_s) }
         .map { |patch| inspect(patch) }
     end
 
+    def offences
+      @offences ||= Clippy::Wrapper.new.lint
+    end
+
     private
 
     def inspect(patch)
-      @offences
+      offences
         .fetch(patch.new_file_full_path.to_s, [])
         .inject([]) do |arr, offence|
-        span = offence['spans']
-        line_start = span['line_start'].to_i
-        line_end = span['line_end'].to_i
-
-        line = patch.added_lines.find do |nr|
-          (line_start..line_end).cover?(nr)
-        end
-
+        line = contains?(patch, offence['spans'].first)
         arr << new_message(offence, line) if line
+        arr
+      end
+    end
+
+    def contains?(patch, span)
+      line_start = span['line_start'].to_i
+      line_end = span['line_end'].to_i
+
+      patch.added_lines.find do |entry|
+        (line_start..line_end).cover?(entry.new_lineno)
       end
     end
 
@@ -36,7 +44,7 @@ module Pronto
       path = line.patch.delta.new_file[:path]
       Message.new(path,
                   line,
-                  offence['level'],
+                  offence['level'].to_sym,
                   offence['message'],
                   nil,
                   self.class)

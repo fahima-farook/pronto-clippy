@@ -5,6 +5,10 @@ class Pronto::Clippy::ParserTest < Minitest::Test
     File.read('test/fixtures/output.json')
   end
 
+  def path
+    File.expand_path('test/sample/src/lib.rs')
+  end
+
   def subject
     Pronto::Clippy::Parser.new(data)
   end
@@ -14,11 +18,11 @@ class Pronto::Clippy::ParserTest < Minitest::Test
   end
 
   def test_it_has_data_on_file
-    assert_includes subject.output.keys, 'test/sample/src/lib.rs'
+    assert_includes subject.output.keys, path
   end
 
   def test_one_error_is_about_unused_variable
-    assert(subject.output['test/sample/src/lib.rs'].any? do |entry|
+    assert(subject.output[path].any? do |entry|
       entry['message'] =~ /unused variable/
     end)
   end

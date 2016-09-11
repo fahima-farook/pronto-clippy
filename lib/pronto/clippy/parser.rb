@@ -12,7 +12,7 @@ module Pronto
                  .each_line
                  .map { |json| JSON.parse(json) }
                  .group_by do |entry|
-          entry['spans'].first['file_name']
+          File.expand_path(entry['spans'].first['file_name'])
         end
       end
 
