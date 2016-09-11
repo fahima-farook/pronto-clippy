@@ -1,1 +1,2 @@
 0000000000000000000000000000000000000000 14eeffe91fd843378d38f0ca202f6ecf8cfb685a Łukasz Jan Niemier <lukasz@niemier.pl> 1473615227 +0200	commit (initial): Initial commit
+14eeffe91fd843378d38f0ca202f6ecf8cfb685a 8d70569600ee18778c987110fa6df55323e063db Łukasz Jan Niemier <lukasz@niemier.pl> 1473627237 +0200	commit: Add .envrc and .gitignore
