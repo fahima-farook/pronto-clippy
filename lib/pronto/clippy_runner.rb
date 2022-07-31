@@ -7,6 +7,7 @@ module Pronto
     attr_reader :patches
 
     def run
+      binding.pry
       return [] unless @patches
 
 
@@ -17,6 +18,7 @@ module Pronto
     end
 
     def offences
+      binding.pry
       @offences ||= Clippy::Wrapper.new.lint
     end
 
