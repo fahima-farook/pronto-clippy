@@ -23,6 +23,7 @@ module Pronto
     private
 
     def inspect(patch)
+      binding.pry
       offences
         .fetch(patch.new_file_full_path.to_s, [])
         .inject([]) do |arr, offence|
