@@ -1,4 +1,5 @@
 require 'pronto'
+require 'pry'
 require_relative 'clippy/wrapper'
 
 module Pronto
@@ -26,6 +27,7 @@ module Pronto
         .fetch(patch.new_file_full_path.to_s, [])
         .inject([]) do |arr, offence|
         line = contains?(patch, offence['spans'].first)
+          binding.pry
         arr << new_message(offence, line) if line
         arr
       end
